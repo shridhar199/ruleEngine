@@ -60,6 +60,11 @@ class Dashboard extends Component<Props> {
                   <ListItemText primary="Rules" />
                 </ListItemButton>
               </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton component={Link} to="/dashboard/Setting">
+                  <ListItemText primary="Setting" />
+                </ListItemButton>
+              </ListItem>
             </List>
           </Box>
           <Box sx={{ flexGrow: 1 }} />

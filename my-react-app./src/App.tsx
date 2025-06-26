@@ -29,6 +29,7 @@ import DashboardLayout from './Dashboard';
 import Chatbot from './Chat';
 import Rules from './Rules';
 import KeycloakService from './keycloak';
+import Setting from './Setting';
 
 class App extends Component<{}, { isAuthenticated: boolean; isInitialized: boolean }> {
   state = {
@@ -63,6 +64,7 @@ class App extends Component<{}, { isAuthenticated: boolean; isInitialized: boole
                   <Switch>
                     <Route path="/dashboard/chatbot" component={Chatbot} />
                     <Route path="/dashboard/rules" component={Rules} />
+                    <Route path="/dashboard/Setting" component={Setting} />
                   </Switch>
                 </DashboardLayout>
               ) : (
