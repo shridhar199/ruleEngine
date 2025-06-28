@@ -10,8 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@copilotkit/react-core": "^1.9.1",
+    "@copilotkit/react-textarea": "^1.8.12",
+    "@copilotkit/react-ui": "^1.9.1",
+    "@copilotkit/runtime": "^1.8.12",
+    "@copilotkit/shared": "^1.8.12",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@heroicons/react": "^2.2.0",
     "@mui/icons-material": "^7.1.2",
     "@mui/material": "^7.1.2",
     "@radix-ui/react-slot": "^1.2.3",
@@ -20,7 +26,8 @@
     "lucide-react": "^0.523.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-router-dom": "^5.3.4"
+    "react-router-dom": "^5.3.4",
+    "react-spreadsheet": "^0.9.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",
