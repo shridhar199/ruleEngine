@@ -26,7 +26,6 @@ import  { Component } from 'react';
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 import LandingPage from './landing';
 import DashboardLayout from './Dashboard';
-import Chatbot from './Chat';
 import Rules from './Rules';
 import KeycloakService from './keycloak';
 import Setting from './Setting';
