@@ -17,6 +17,7 @@ import { copilotkitRuntimeUrl, serverRuleEngineUrl } from "../lib/config"
 // import { Bottombar } from "./components/Bottombar";
 
 const CopilotkitSidebar = () => {
+  const token = localStorage.getItem("token")
   // const base_URl = 'http://localhost:5344/'
   const url = `${copilotkitRuntimeUrl}/copilotkit`
   // const {send } = useCopilotChat() 
@@ -29,9 +30,9 @@ const CopilotkitSidebar = () => {
   return (
     <CopilotKit
       runtimeUrl={url}
-    //   headers={{
-    //     Authorization: `Bearer ${keycloakClient.token}`,
-    //   }}
+      headers={{
+        Authorization: `Bearer ${token}`,
+      }}
     >
       <CopilotSidebar
         instructions={INSTRUCTIONS}
@@ -39,9 +40,9 @@ const CopilotkitSidebar = () => {
           title: "Rule Master AI Chatbot",
           initial: "Welcome to the Rule Master AI Chatbot",
         }}
-        // defaultOpen={true}
-        // clickOutsideToClose={false}
-        // messageActions={false} 
+        defaultOpen={true}
+        clickOutsideToClose={false}
+        // messageActions={false}
         // onSetOpen={handleOpen}
       >
 
@@ -55,6 +56,7 @@ const Main = () => {
   const [spreadsheets, setSpreadsheets] = useState<SpreadsheetData[]>([]);
   const [selectedSpreadsheetIndex, setSelectedSpreadsheetIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+    const [refreshTrigger, setRefreshTrigger] = useState(0); 
 
   // const refreshCount = useRulesStore((state) => state.refreshCount);
   // const { triggerRefresh } = useRulesStore();
@@ -66,6 +68,7 @@ const Main = () => {
     handler: async () => {
       console.log("Refreshing spreadsheet data...");
       // triggerRefresh();
+      setRefreshTrigger(prev => prev + 1);
       return { success: true, message: "Spreadsheet data refreshed" };
     },
   });
@@ -106,7 +109,7 @@ const Main = () => {
     };
 
     fetchRulesAndGenerateSheets();
-  }, []);
+  }, [refreshTrigger]);
 
 const flattenObject = (obj: any, prefix = ""): Record<string, string> => {
   const flattened: Record<string, string> = {};
