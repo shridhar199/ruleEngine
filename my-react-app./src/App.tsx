@@ -39,12 +39,13 @@ class App extends Component<{}, { isAuthenticated: boolean; isInitialized: boole
 
   async componentDidMount() {
     const keycloak = KeycloakService.getKeycloak();
-    await keycloak.init({ onLoad: 'check-sso', silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html' });
+    await keycloak.init({ onLoad: 'check-sso'});
     this.setState({
       isAuthenticated: keycloak.authenticated || false,
       isInitialized: true
     });
-    console.log("componentDidMount")
+    console.log("componentDidMount",keycloak.token)
+    localStorage.setItem('token',keycloak.token)
   }
 
   render() {

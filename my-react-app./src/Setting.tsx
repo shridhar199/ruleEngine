@@ -38,6 +38,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import CloseIcon from '@mui/icons-material/Close';
 import type { RouteComponentProps } from 'react-router-dom';
 import type { StaticContext } from 'react-router';
+import axios from 'axios';
 
 // Define initial detailed permissions structure
 const initialDetailedPermissions = {
@@ -192,25 +193,57 @@ class Setting extends Component<RouteComponentProps> {
   };
 
   // Handle adding a new user
-  handleAddUser = () => {
+  handleAddUser = async () => {
     const { newUserName, newUserEmail, newUserGroup, users } = this.state;
-    if (newUserName && newUserEmail) {
-      const newUser = {
-        id: users.length + 1,
-        name: newUserName,
-        email: newUserEmail,
-        group: newUserGroup || 'N/A',
-      };
-      this.setState({
-        users: [...users, newUser],
-        openCreateUserDialog: false, // Close dialog after adding
-        newUserName: '',
-        newUserEmail: '',
-        newUserGroup: '',
+  
+  if (newUserName && newUserEmail) {
+    const newUser = {
+      username: newUserName,
+      email: newUserEmail,
+      enabled: true,
+      attributes: {
+        group: [newUserGroup || 'N/A'],
+      },
+    };
+
+    const token = localStorage.getItem('token')
+    fetch('http://localhost:5344/rules/user', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`, // You must have a valid token here
+      },
+      body: JSON.stringify(newUser),
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to create user');
+        }
+        return response.json();
+      })
+      .then(() => {
+        // Local state update after successful creation
+        const newLocalUser = {
+          id: users.length + 1,
+          name: newUserName,
+          email: newUserEmail,
+          group: newUserGroup || 'N/A',
+        };
+        this.setState({
+          users: [...users, newLocalUser],
+          openCreateUserDialog: false,
+          newUserName: '',
+          newUserEmail: '',
+          newUserGroup: '',
+        });
+      })
+      .catch(error => {
+        console.error('Error creating user:', error);
       });
-    } else {
-      console.log('Please fill in Name and Email to add a user.');
-    }
+
+  } else {
+    console.log('Please fill in Name and Email to add a user.');
+  }
   };
 
   // Handle adding a new group

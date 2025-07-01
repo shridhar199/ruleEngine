@@ -118,7 +118,7 @@ class Dashboard extends Component<Props> {
                   />
                 </ListItemButton>
               </ListItem>
-              <ListItem disablePadding sx={{ mb: 1 }}>
+              {/* <ListItem disablePadding sx={{ mb: 1 }}>
                 <ListItemButton
                   component={Link}
                     to="/dashboard/rules"
@@ -138,7 +138,7 @@ class Dashboard extends Component<Props> {
                     primaryTypographyProps={{ fontWeight: 'medium', fontSize: '1rem' }}
                   />
                 </ListItemButton>
-              </ListItem>
+              </ListItem> */}
               <ListItem disablePadding sx={{ mb: 1 }}>
                 <ListItemButton
                   component={Link}
