@@ -140,7 +140,7 @@ export default class App extends Component<RouteComponentProps> {
               <Toolbar sx={{ justifyContent: 'space-between' }}>
                 <Logo />
                 <Button variant="contained" color="primary" onClick={this.handleLogin}>
-                  Go to Dashboard
+                  Login
                 </Button>
               </Toolbar>
             </Container>

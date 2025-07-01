@@ -38,16 +38,11 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import CloseIcon from '@mui/icons-material/Close';
 import type { RouteComponentProps } from 'react-router-dom';
 import type { StaticContext } from 'react-router';
-import axios from 'axios';
 
 // Define initial detailed permissions structure
 const initialDetailedPermissions = {
   'Organisation Management': {
-    'Role': { create: false, edit: false, delete: false, view: false },
-    'Group': { create: false, edit: false, delete: false, view: false },
-    'User': { create: false, edit: false, delete: false, view: false },
-    'Appearance': { create: false, edit: false, delete: false, view: false },
-    'Aggregator': { create: false, edit: false, delete: false, view: false },
+    'rules': { create: false, edit: false, delete: false, view: false }
   }
 };
 
@@ -383,7 +378,7 @@ class Setting extends Component<RouteComponentProps> {
     } = this.state;
 
     return (
-      <Box sx={{ minHeight: '100vh', backgroundColor: '#f4f6f8', p: { xs: 2, sm: 3, lg: 4 } }}>
+      <Box sx={{ minHeight: '100vh', backgroundColor: '#F9FAFB', p: { xs: 2, sm: 3, lg: 4 } }}>
         {/* Settings Header */}
         <Box sx={{ mb: 4 }}>
           <Typography variant="h4" component="h1" sx={{ fontWeight: 'bold', color: '#1a202c', mb: 1 }}>

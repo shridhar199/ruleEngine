@@ -2,11 +2,10 @@ import  { Component } from 'react';
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 import LandingPage from './landing';
 import DashboardLayout from './Dashboard';
-import Rules from './Rules';
 import KeycloakService from './keycloak';
 import Setting from './Setting';
 import CopilotkitSidebar from './page/CopilotChatbot.tsx'
-
+import profile from './Profile.tsx'
 class App extends Component<{}, { isAuthenticated: boolean; isInitialized: boolean }> {
   state = {
     isAuthenticated: false,
@@ -40,8 +39,8 @@ class App extends Component<{}, { isAuthenticated: boolean; isInitialized: boole
                 <DashboardLayout>
                   <Switch>
                     <Route path="/dashboard/chatbot" component={CopilotkitSidebar} />
-                    <Route path="/dashboard/rules" component={Rules} />
                     <Route path="/dashboard/Setting" component={Setting} />
+                    <Route path="/dashboard/profile" component={profile} />
                   </Switch>
                 </DashboardLayout>
               ) : (

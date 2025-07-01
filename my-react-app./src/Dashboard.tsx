@@ -129,27 +129,6 @@ class Dashboard extends Component<Props> {
                   />
                 </ListItemButton>
               </ListItem>
-              {/* <ListItem disablePadding sx={{ mb: 1 }}>
-                <ListItemButton
-                  component={Link}
-                    to="/dashboard/Setting"
-                  sx={{
-                    borderRadius: '8px',
-                    '&:hover': {
-                      backgroundColor: alpha(purple[300], 0.2),
-                    },
-                    '&.Mui-selected': {
-                        backgroundColor: alpha(purple[300], 0.3),
-                    },
-                    py: 1.2,
-                  }}
-                >
-                  <ListItemText
-                    primary="Setting"
-                    primaryTypographyProps={{ fontWeight: 'medium', fontSize: '1rem' }}
-                  />
-                </ListItemButton>
-              </ListItem> */}
               {isAdmin && (
               <ListItem disablePadding sx={{ mb: 1 }}>
                 <ListItemButton
@@ -176,6 +155,27 @@ class Dashboard extends Component<Props> {
                 </ListItemButton>
               </ListItem>
             )}
+            <ListItem disablePadding sx={{ mb: 1 }}>
+                <ListItemButton
+                  component={Link}
+                    to="/dashboard/profile"
+                  sx={{
+                    borderRadius: '8px',
+                    '&:hover': {
+                      backgroundColor: alpha(purple[300], 0.2),
+                    },
+                    '&.Mui-selected': {
+                        backgroundColor: alpha(purple[300], 0.3),
+                    },
+                    py: 1.2,
+                  }}
+                >
+                  <ListItemText
+                    primary="Profile"
+                    primaryTypographyProps={{ fontWeight: 'medium', fontSize: '1rem' }}
+                  />
+                </ListItemButton>
+              </ListItem>
             </List>
           </Box>
           <Box sx={{ flexGrow: 1 }} /> {/* This pushes the logout button to the bottom */}

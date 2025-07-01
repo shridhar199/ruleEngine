@@ -8,7 +8,7 @@ const keycloak = new Keycloak({
 });
 
 const KeycloakService = {
-  login: () => keycloak.login({ redirectUri: window.location.origin + '/dashboard/Setting' }),
+  login: () => keycloak.login({ redirectUri: window.location.origin + '/dashboard/profile' }),
   logout: () => keycloak.logout(),
   getToken: () => keycloak.token,
   getKeycloak: () => keycloak
