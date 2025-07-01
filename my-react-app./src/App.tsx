@@ -1,27 +1,3 @@
-// src/App.js
-// import { useKeycloak } from '@react-keycloak/web';
-
-// function App() {
-//   const { keycloak, initialized } = useKeycloak();
-
-//   if (!initialized) return <div>Loading...</div>;
-
-//   return (
-//     <div>
-//       {keycloak.authenticated ? (
-//         <>
-//           <h1>Welcome, {keycloak.tokenParsed?.preferred_username}</h1>
-//           <button onClick={() => keycloak.logout()}>Logout</button>
-//         </>
-//       ) : (
-//         <button onClick={() => keycloak.login()}>Login</button>
-//       )}
-//     </div>
-//   );
-// }
-
-// export default App;
-
 import  { Component } from 'react';
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 import LandingPage from './landing';
