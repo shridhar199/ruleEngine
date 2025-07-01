@@ -78,16 +78,13 @@ class Setting extends Component<RouteComponentProps> {
       newUserName: '',
       newUserEmail: '',
       newUserGroup: '',
-      users: [
-        { id: 1, name: 'Alice', email: 'alice@example.com', group: 'Developers' },
-        { id: 2, name: 'Bob', email: 'bob@example.com', group: 'Sales Team' },
-        { id: 3, name: 'Charlie', email: 'charlie@example.com', group: 'Marketing' },
-        { id: 4, name: 'Diana', email: 'diana@example.com', group: 'N/A' },
-      ],
+      users: [],
 
       // Group Management States
       newGroupName: '',
       newGroupDescription: '',
+      userToDeleteId: null,
+      openDeleteConfirmDialog: false, 
       newGroupRoles: [],
       groups: [
         { id: 1, name: 'Sales Team', description: 'Responsible for all sales activities.', roles: ['Editor', 'Viewer'] },
@@ -122,6 +119,44 @@ class Setting extends Component<RouteComponentProps> {
   // Handle tab change
   handleTabChange = (event: any, newValue: any) => {
     this.setState({ activeTab: newValue });
+  };
+
+  //getUsers
+  componentDidMount() {
+    this.fetchUsers(); // Fetch users when the component mounts
+  }
+
+  // Simulate API call to fetch users
+  fetchUsers = async () => {
+    this.setState({ loadingUsers: true, usersError: null });
+    try {
+      // Replace with your actual API call
+      // Example using fetch:
+      const token = localStorage.getItem('token'); // Retrieve token from local storage
+      const response = await fetch(import.meta.env.VITE_RULENGIN_SERVER + '/rules/users', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` // Include authorization header
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      // Map the API response to your desired user structure
+      const fetchedUsers = data.map(user => ({
+        id: user.id, // Assuming API returns an 'id'
+        name: user.username, // Assuming API returns 'username'
+        email: user.email, // Assuming API returns 'email'
+        group: user.attributes?.group?.[0] || 'N/A', // Assuming group is in attributes.group array
+      }));
+      this.setState({ users: fetchedUsers, loadingUsers: false });
+    } catch (error) {
+      console.error("Failed to fetch users:", error);
+      this.setState({ usersError: "Failed to load users. Please try again.", loadingUsers: false });
+    }
   };
 
   // Handle input changes for forms (general purpose)
@@ -207,7 +242,7 @@ class Setting extends Component<RouteComponentProps> {
     };
 
     const token = localStorage.getItem('token')
-    fetch('http://localhost:5344/rules/user', {
+    fetch(import.meta.env.VITE_RULENGIN_SERVER+'/rules/user', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -219,6 +254,7 @@ class Setting extends Component<RouteComponentProps> {
         if (!response.ok) {
           throw new Error('Failed to create user');
         }
+        this.componentDidMount();
         return response.json();
       })
       .then(() => {
@@ -244,6 +280,39 @@ class Setting extends Component<RouteComponentProps> {
   } else {
     console.log('Please fill in Name and Email to add a user.');
   }
+  };
+
+  // Handle deleting a user via API
+  handleDeleteUser = async () => {
+    const { userToDeleteId } = this.state;
+    if (!userToDeleteId) return;
+
+    this.setState({ loadingUsers: true, openDeleteConfirmDialog: false }); // Close dialog and show loading
+    try {
+      const token = localStorage.getItem('token'); // Retrieve token
+      const response = await fetch(`${import.meta.env.VITE_RULENGIN_SERVER}/rules/user/${userToDeleteId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to delete user: ${response.statusText}`);
+      }
+      await this.fetchUsers(); // Re-fetch users to update the table after deletion
+      console.log(`User with ID ${userToDeleteId} deleted successfully.`);
+    } catch (error) {
+      console.error("Failed to delete user:", error);
+      this.setState({ usersError: `Failed to delete user. ${error.message}`, loadingUsers: false });
+    } finally {
+      this.setState({ userToDeleteId: null }); // Clear userToDeleteId
+    }
+  };
+
+   handleOpenDeleteConfirmDialog = (userId:any) => {
+    this.setState({ userToDeleteId: userId, openDeleteConfirmDialog: true });
   };
 
   // Handle adding a new group
@@ -310,7 +379,7 @@ class Setting extends Component<RouteComponentProps> {
       newUserName, newUserEmail, newUserGroup, users,
       newGroupName, newGroupDescription, newGroupRoles, groups, availableRoles,
       newRoleName, newRoleDescription, newRolePermissions, roles,
-      openCreateRoleDialog, openCreateUserDialog, openCreateGroupDialog
+      openCreateRoleDialog, openCreateUserDialog, openCreateGroupDialog,openDeleteConfirmDialog
     } = this.state;
 
     return (
@@ -388,7 +457,7 @@ class Setting extends Component<RouteComponentProps> {
                             <EditIcon fontSize="small" />
                           </IconButton>
                           <IconButton aria-label="delete" size="small" color="error">
-                            <DeleteIcon fontSize="small" />
+                            <DeleteIcon fontSize="small" onClick={() => this.handleOpenDeleteConfirmDialog(user.id)}/>
                           </IconButton>
                         </TableCell>
                       </TableRow>
@@ -468,6 +537,43 @@ class Setting extends Component<RouteComponentProps> {
                     sx={{ borderRadius: '8px' }}
                   >
                     Add User
+                  </Button>
+                </DialogActions>
+              </Dialog>
+
+              <Dialog
+                open={openDeleteConfirmDialog}
+                onClose={this.handleCloseDeleteConfirmDialog}
+                maxWidth="xs"
+                fullWidth
+                PaperProps={{ sx: { borderRadius: '12px' } }}
+              >
+                <DialogTitle sx={{ m: 0, p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Typography variant="h6" component="div" sx={{ fontWeight: 'medium' }}>
+                    Confirm Deletion
+                  </Typography>
+                  <IconButton
+                    aria-label="close"
+                    onClick={this.handleCloseDeleteConfirmDialog}
+                    sx={{ color: (theme) => theme.palette.grey[500] }}
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                </DialogTitle>
+                <DialogContent dividers sx={{ p: { xs: 2, sm: 3 } }}>
+                  <Typography variant="body1">
+                    Are you sure you want to delete this user? This action cannot be undone.
+                  </Typography>
+                </DialogContent>
+                <DialogActions sx={{ p: 2, justifyContent: 'flex-end' }}>
+                  <Button onClick={this.handleCloseDeleteConfirmDialog} sx={{ borderRadius: '8px' }}>Cancel</Button>
+                  <Button
+                    variant="contained"
+                    color="error" // Use error color for delete action
+                    onClick={this.handleDeleteUser}
+                    sx={{ borderRadius: '8px' }}
+                  >
+                    Delete
                   </Button>
                 </DialogActions>
               </Dialog>

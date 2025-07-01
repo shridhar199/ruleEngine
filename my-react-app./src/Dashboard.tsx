@@ -37,6 +37,17 @@ class Dashboard extends Component<Props> {
 
   render() {
     const { children } = this.props;
+
+    const tokenData = localStorage.getItem('token') ? localStorage.getItem('token') : '';
+    const [header, payload] = tokenData.split('.');
+
+    const decodedHeader = JSON.parse(atob(header));
+    const decodedPayload = JSON.parse(atob(payload));
+
+    console.log('Header:', decodedHeader);
+    console.log('Payload:', decodedPayload);
+    const isAdmin = decodedPayload['user-groups']?.includes("admin")
+    console.log("isAdmin",isAdmin)
     // `currentLocationPath` logic is removed as `useLocation` is no longer available directly.
     // To enable 'selected' state, you would need to manually apply the 'Mui-selected' class
     // based on `window.location.pathname` or pass a `selected` prop from a parent routing context.
@@ -121,27 +132,6 @@ class Dashboard extends Component<Props> {
               {/* <ListItem disablePadding sx={{ mb: 1 }}>
                 <ListItemButton
                   component={Link}
-                    to="/dashboard/rules"
-                  sx={{
-                    borderRadius: '8px',
-                    '&:hover': {
-                      backgroundColor: alpha(purple[300], 0.2),
-                    },
-                    '&.Mui-selected': {
-                        backgroundColor: alpha(purple[300], 0.3),
-                    },
-                    py: 1.2,
-                  }}
-                >
-                  <ListItemText
-                    primary="Rules"
-                    primaryTypographyProps={{ fontWeight: 'medium', fontSize: '1rem' }}
-                  />
-                </ListItemButton>
-              </ListItem> */}
-              <ListItem disablePadding sx={{ mb: 1 }}>
-                <ListItemButton
-                  component={Link}
                     to="/dashboard/Setting"
                   sx={{
                     borderRadius: '8px',
@@ -159,7 +149,33 @@ class Dashboard extends Component<Props> {
                     primaryTypographyProps={{ fontWeight: 'medium', fontSize: '1rem' }}
                   />
                 </ListItemButton>
+              </ListItem> */}
+              {isAdmin && (
+              <ListItem disablePadding sx={{ mb: 1 }}>
+                <ListItemButton
+                  component={Link}
+                  to="/dashboard/Setting"
+                  sx={{
+                    borderRadius: '8px',
+                    '&:hover': {
+                      backgroundColor: alpha(purple[300], 0.2),
+                    },
+                    '&.Mui-selected': {
+                      backgroundColor: alpha(purple[300], 0.3),
+                    },
+                    py: 1.2,
+                  }}
+                >
+                  <ListItemText
+                    primary="Setting"
+                    primaryTypographyProps={{
+                      fontWeight: 'medium',
+                      fontSize: '1rem',
+                    }}
+                  />
+                </ListItemButton>
               </ListItem>
+            )}
             </List>
           </Box>
           <Box sx={{ flexGrow: 1 }} /> {/* This pushes the logout button to the bottom */}
